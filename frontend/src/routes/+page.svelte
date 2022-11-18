@@ -1,9 +1,17 @@
-<script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+<script lang="ts">
+	import Counter from "./Counter.svelte";
+	import welcome from "$lib/images/svelte-welcome.webp";
+	import welcome_fallback from "$lib/images/svelte-welcome.png";
+	import { onMount } from "svelte";
+	import { getItems } from "./data/+server.js";
+	let items = {};
+	onMount(async () => {
+		items = await getItems();
+	});
+	console.log(items);
 </script>
 
+items are {items}
 <svelte:head>
 	<title>Home</title>
 	<meta name="description" content="Svelte demo app" />
