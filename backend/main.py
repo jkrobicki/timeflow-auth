@@ -109,8 +109,9 @@ async def test(user_id, author: str | None = Header(default=None)):
 
 
 @app.get("/items/")
-async def read_items(authorizatio: str | None = Header(default=None)):
-    return f"item is, token is "
+async def read_items(request: Request):
+    auth_header = request.headers.get("Authorization")
+    return f"item is, auth header is {auth_header}"
 
 
 # @app.get("/test")
