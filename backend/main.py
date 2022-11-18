@@ -11,6 +11,7 @@ from jose import JWTError, jwt
 import time
 from fastapi.responses import JSONResponse
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 ### secret gen ###
 import secrets
@@ -21,6 +22,15 @@ secret = secrets.token_hex(16)
 SECRET_KEY = "5556ed7886a0f5a1e0aa2aeb30b40191"
 ALGORITHM = "HS256"
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -95,14 +105,11 @@ async def test(user_id, author: str | None = Header(default=None)):
     payload = {"userID": user_id, "expiry": 1}
     token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
     print(token)
-
     return token
 
 
 @app.get("/items/")
 async def read_items(authorizatio: str | None = Header(default=None)):
-    print("priiiiiiiiiiiiiiiiiint")
-    print("print sth")
     return f"item is, token is "
 
 
