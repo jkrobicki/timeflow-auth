@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  fastapi_test:
+    image: fastapi:v3
+    volumes:
+      - /. /.
+    command: >
+      bash -c "uvicorn main:app --reload --port 8003 --host 0.0.0.0"
+    ports:
+      - 8003:8003
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
