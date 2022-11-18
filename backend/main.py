@@ -12,6 +12,7 @@ import time
 from fastapi.responses import JSONResponse
 import os
 from fastapi.middleware.cors import CORSMiddleware
+from data import SECRET_KEY, ALGORITHM
 
 ### secret gen ###
 import secrets
@@ -19,8 +20,6 @@ import secrets
 secret = secrets.token_hex(16)
 ### ###
 
-SECRET_KEY = "5556ed7886a0f5a1e0aa2aeb30b40191"
-ALGORITHM = "HS256"
 app = FastAPI()
 
 app.add_middleware(
@@ -76,6 +75,7 @@ async def add_process_time_header(request: Request, call_next):
 
 # @app.middleware("http")
 # async def add_middleware_here(request: Request, call_next):
+#     """verify token"""
 #     token = request.headers["Authorization"]
 #     try:
 #         verification_of_token = verify_token(token)
@@ -86,39 +86,6 @@ async def add_process_time_header(request: Request, call_next):
 #             return JSONResponse(status_code=403)  # or 401
 #     except:
 #         return JSONResponse(status_code=401)
-
-
-class Token(BaseModel):
-    value: str
-
-
-@app.post("/token")
-async def test(user_id, author: str | None = Header(default=None)):
-    """Working jwt encoding
-
-    Args:
-        user_id (int): User id to encode
-
-    Returns:
-        str: token
-    """
-    payload = {"userID": user_id, "expiry": 1}
-    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-    print(token)
-    return token
-
-
-@app.get("/items/")
-async def read_items(request: Request):
-    auth_header = request.headers.get("Authorization")
-    return f"item is, auth header is {auth_header}"
-
-
-# @app.get("/test")
-# async def test_token():
-#     # headers = {"Authorization": token}
-#     response = requests.get("http://localhost:8003/items/?item=11")
-# return response.json()
 
 
 """
